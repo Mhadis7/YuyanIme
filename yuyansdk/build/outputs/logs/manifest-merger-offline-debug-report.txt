@@ -1,0 +1,114 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:2:1-53:12
+INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:2:1-53:12
+	package
+		INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.VIBRATE
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:3:5-66
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:3:22-63
+queries
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:4:5-13:15
+intent#action:name:android.intent.action.GET_CONTENT+category:name:android.intent.category.OPENABLE+data:mimeType:*/*
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:5:9-9:18
+action#android.intent.action.GET_CONTENT
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:6:13-71
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:6:21-69
+category#android.intent.category.OPENABLE
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:7:13-72
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:7:23-70
+data
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:8:13-43
+	android:mimeType
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:8:19-41
+intent#action:name:android.media.action.IMAGE_CAPTURE
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:10:9-12:18
+action#android.media.action.IMAGE_CAPTURE
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:11:13-72
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:11:21-70
+application
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:14:5-51:19
+	android:supportsRtl
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:15:9-35
+activity#com.yuyan.imemodule.ui.activity.SettingsActivity
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:16:9-19:20
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:18:13-36
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:17:13-57
+activity#com.yuyan.imemodule.ui.activity.LauncherActivity
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:20:9-28:20
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:22:13-36
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:21:13-57
+intent-filter#action:name:android.intent.action.MAIN+action:name:android.intent.action.VIEW+category:name:android.intent.category.LAUNCHER
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:23:13-27:29
+action#android.intent.action.MAIN
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:24:17-69
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:24:25-66
+action#android.intent.action.VIEW
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:25:17-69
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:25:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:26:17-77
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:26:27-74
+activity#com.yuyan.imemodule.ui.setup.SetupActivity
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:30:9-32:47
+	android:launchMode
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:32:13-44
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:30:19-57
+activity#com.yuyan.imemodule.ui.fragment.theme.CustomThemeActivity
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:33:9-37:50
+	android:label
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:37:13-47
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:36:13-37
+	android:configChanges
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:35:13-59
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:34:13-66
+activity#com.yuyan.imemodule.libs.cropper.CropImageActivity
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:38:9-41:61
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:40:13-37
+	android:theme
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:41:13-59
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:39:13-59
+provider#com.yuyan.imemodule.libs.cropper.CropFileProvider
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:42:9-50:20
+	android:grantUriPermissions
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:46:13-47
+	android:authorities
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:44:13-72
+	android:exported
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:45:13-37
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:43:13-58
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:47:13-49:69
+	android:resource
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:49:17-67
+	android:name
+		ADDED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml:48:17-67
+uses-sdk
+INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml
+INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /opt/data/YuyanIme/yuyansdk/src/main/AndroidManifest.xml

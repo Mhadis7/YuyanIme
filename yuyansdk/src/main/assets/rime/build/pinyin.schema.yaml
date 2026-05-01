@@ -4,7 +4,7 @@
 schema:
   schema_id: pinyin
   name: 全键拼音
-  version: "2026-05-01"
+  version: "2026-05-02"
   description: |
     全键拼音 (融合雾凇拼音模糊音支持)
     https://github.com/iDvel/rime-ice
@@ -106,36 +106,42 @@ speller:
   initials: "zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA"
   delimiter: " '"
   algebra:
-    ### 模糊音匹配（默认启用 in/ing, en/eng, an/ang 等）
-    - derive/en$/eng/
-    - derive/eng$/en/
-    - derive/in$/ing/
-    - derive/ing$/in/
-    - derive/an$/ang/
-    - derive/ang$/an/
-    - derive/ian$/iang/
-    - derive/iang$/ian/
-    - derive/uan$/uang/
-    - derive/uang$/uan/
+    ### ====== 基础模糊音（fuzzy_basic，Simple 模式）=======
+    ### in ↔ ing, en ↔ eng, an ↔ ang
+    - "opt(fuzzy_basic): derive/en$/eng/"
+    - "opt(fuzzy_basic): derive/eng$/en/"
+    - "opt(fuzzy_basic): derive/in$/ing/"
+    - "opt(fuzzy_basic): derive/ing$/in/"
+    - "opt(fuzzy_basic): derive/an$/ang/"
+    - "opt(fuzzy_basic): derive/ang$/an/"
 
-    ### 模糊音 — 声母（默认启用 zh↔z, ch↔c, sh↔s）
-    - derive/^zh/z/
-    - derive/^z/zh/      # match both directions: zh->z only. use next rule for z->zh
-    # 注意: 上面的 ^z 规则会和 ^zh 冲突。改用更精确的方式:
-    - "derive/^([zcs])h/$1/"   # zh* ch* sh* *also* match z* c* s*
-    - "derive/^([zcs])([^h])/$1h$2/"   # z* c* s* *also* match zh* ch* sh*
+    ### ====== 高级模糊音（fuzzy_advanced，Comprehensive 模式）=======
+    ### 韵母扩展
+    - "opt(fuzzy_advanced): derive/ian$/iang/"
+    - "opt(fuzzy_advanced): derive/iang$/ian/"
+    - "opt(fuzzy_advanced): derive/uan$/uang/"
+    - "opt(fuzzy_advanced): derive/uang$/uan/"
 
-    ### 模糊音 — n/l, f/h, r/l
-    - derive/^l/n/
-    - derive/^n/l/
-    - derive/^f/h/
-    - derive/^h/f/
-    - derive/^r/l/
-    - derive/^l/r/
+    ### 声母模糊音 — zh↔z, ch↔c, sh↔s
+    - "opt(fuzzy_advanced): derive/^zh/z/"
+    - "opt(fuzzy_advanced): derive/^z/zh/"
+    - "opt(fuzzy_advanced): derive/^([zcs])h/$1/"
+    - "opt(fuzzy_advanced): derive/^([zcs])([^h])/$1h$2/"
 
-    ### v u 转换
-    - derive/^([nl])ve$/$1ue/
-    - derive/^([jqxy])u/$1v/
+    ### 声母模糊音 — n↔l, f↔h, r↔l
+    - "opt(fuzzy_advanced): derive/^l/n/"
+    - "opt(fuzzy_advanced): derive/^n/l/"
+    - "opt(fuzzy_advanced): derive/^f/h/"
+    - "opt(fuzzy_advanced): derive/^h/f/"
+    - "opt(fuzzy_advanced): derive/^r/l/"
+    - "opt(fuzzy_advanced): derive/^l/r/"
+
+    ### 其他韵母模糊
+    - "opt(fuzzy_advanced): derive/^([nl])ve$/$1ue/"
+    - "opt(fuzzy_advanced): derive/^([jqxy])u/$1v/"
+
+    ### ====== 始终启用的规则 ======
+    ### v u 转换（不是模糊音，是输入习惯）
     - derive/^([nl])ue$/$1ve/
     - derive/^([jqxy])v/$1u/
 
@@ -147,7 +153,7 @@ speller:
     - abbrev/^([a-z]).+$/$1/
     - abbrev/^([zcs]h).+$/$1/
 
-    ### 自动纠错
+    ### 自动纠错（始终启用，纠正常见打字错误）
     - derive/^([wghk])ai$/$1ia/
     - derive/([wfghkz])ei$/$1ie/
     - derive/([jqx])ie$/$1ei/
@@ -179,8 +185,6 @@ speller:
     - derive/([jqx])iong$/$1oing/
     - derive/([jqx])iong$/$1iogn/
     - derive/([jqx])iong$/$1oign/
-
-    ### 其他
     - derive/([rtsdghkzc])o(u|ng)$/$1o/
     - derive/(.+)ong$/$1on/
     - derive/([tl])eng$/$1en/

@@ -7,8 +7,19 @@ import com.yuyan.inputmethod.core.Rime
 /**
  * 模糊音工具类
  * 通过 Rime 的 setOption API 控制模糊音开关
+ *
+ * 对应 pinyin.schema.yaml 中的 option:
+ * - fuzzy_basic:    基础模糊音（in↔ing, en↔eng, an↔ang）
+ * - fuzzy_advanced: 全面模糊音（所有声母韵母模糊规则）
+ *
+ * 关闭 = 两个 option 都关
+ * 简单 = 只开启 fuzzy_basic
+ * 全面 = 开启 fuzzy_basic + fuzzy_advanced
  */
 object FuzzyPinyinUtils {
+
+    private const val OPT_BASIC = "fuzzy_basic"
+    private const val OPT_ADVANCED = "fuzzy_advanced"
 
     /**
      * 应用当前的模糊音设置到 Rime 引擎
@@ -19,75 +30,40 @@ object FuzzyPinyinUtils {
         applyMode(mode)
     }
 
-    /**
-     * 根据模式应用模糊音配置
-     * Rime 支持通过 option 控制模糊音：
-     * - fuzzy_en_eng: en/eng 不分
-     * - fuzzy_in_ing: in/ing 不分
-     * - fuzzy_an_ang: an/ang 不分
-     * 更多规则详见 comprehensiveRules
-     */
-    private val simpleRules = setOf(
-        "fuzzy_en_eng",
-        "fuzzy_in_ing",
-        "fuzzy_an_ang",
-    )
-
-    private val comprehensiveRules = setOf(
-        "fuzzy_en_eng",
-        "fuzzy_in_ing",
-        "fuzzy_an_ang",
-        "fuzzy_ian_iang",
-        "fuzzy_u_ü",
-        "fuzzy_l_n",
-        "fuzzy_s_sh",
-        "fuzzy_z_zh",
-        "fuzzy_c_ch",
-        "fuzzy_f_h",
-        "fuzzy_k_g",
-        "fuzzy_r_l",
-        "fuzzy_ou_iu",
-        "fuzzy_ai_ei",
-        "fuzzy_ao_ou",
-        "fuzzy_ui_uei",
-        "fuzzy_ia_ua",
-    )
-
     private fun applyMode(mode: FuzzyPinyinMode) {
-        // 先关闭所有模糊音
-        val allRules = simpleRules + comprehensiveRules
-        for (rule in allRules) {
-            Rime.setOption(rule, false)
-        }
-
         when (mode) {
-            FuzzyPinyinMode.Off -> { /* 已全部关闭 */ }
+            FuzzyPinyinMode.Off -> {
+                Rime.setOption(OPT_BASIC, false)
+                Rime.setOption(OPT_ADVANCED, false)
+            }
             FuzzyPinyinMode.Simple -> {
-                for (rule in simpleRules) {
-                    Rime.setOption(rule, true)
-                }
+                Rime.setOption(OPT_BASIC, true)
+                Rime.setOption(OPT_ADVANCED, false)
             }
             FuzzyPinyinMode.Comprehensive -> {
-                for (rule in comprehensiveRules) {
-                    Rime.setOption(rule, true)
-                }
+                Rime.setOption(OPT_BASIC, true)
+                Rime.setOption(OPT_ADVANCED, true)
             }
-            FuzzyPinyinMode.Custom -> { /* 预留 */ }
+            FuzzyPinyinMode.Custom -> {
+                // 预留：自定义规则
+                Rime.setOption(OPT_BASIC, false)
+                Rime.setOption(OPT_ADVANCED, false)
+            }
         }
     }
 
     /**
-     * 获取当前已启用的模糊音规则列表
+     * 获取当前已启用的模糊音规则描述
      */
     fun getEnabledRules(): List<String> {
-        return (simpleRules + comprehensiveRules).filter { rule ->
-            val mode = AppPrefs.getInstance().input.fuzzyPinyinMode.getValue()
-            when (mode) {
-                FuzzyPinyinMode.Off -> false
-                FuzzyPinyinMode.Simple -> rule in simpleRules
-                FuzzyPinyinMode.Comprehensive -> true
-                FuzzyPinyinMode.Custom -> false
-            }
+        val mode = AppPrefs.getInstance().input.fuzzyPinyinMode.getValue()
+        return when (mode) {
+            FuzzyPinyinMode.Off -> emptyList()
+            FuzzyPinyinMode.Simple -> listOf("基础模糊音（in/ing, en/eng, an/ang）")
+            FuzzyPinyinMode.Comprehensive -> listOf(
+                "全面模糊音（含声母、韵母全部规则）"
+            )
+            FuzzyPinyinMode.Custom -> emptyList()
         }
     }
 
