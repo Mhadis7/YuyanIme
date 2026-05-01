@@ -93,9 +93,6 @@ recognizer:
   patterns:
     punct: "^/([0-9]|10|[A-Za-z]*?)$"
 
-key_binder:
-  import_preset: default
-
 editor:
   bindings:
     space: confirm

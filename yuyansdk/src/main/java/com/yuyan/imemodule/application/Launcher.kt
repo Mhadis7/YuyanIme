@@ -13,6 +13,7 @@ import com.yuyan.imemodule.service.ClipboardHelper
 import com.yuyan.imemodule.utils.AssetUtils.copyFileOrDir
 import com.yuyan.imemodule.utils.thread.ThreadPoolUtils
 import com.yuyan.inputmethod.core.Kernel
+import java.io.File
 
 class Launcher {
     lateinit var context: Context
@@ -42,6 +43,10 @@ class Launcher {
                 //rime词库
                 copyFileOrDir(context, "rime", "", CustomConstant.RIME_DICT_PATH, true)
                 copyFileOrDir(context, "hw", "", CustomConstant.HW_DICT_PATH, true)
+                // 删除编译好的 pinyin.prism.bin，让 Rime 启动时根据新的 schema.yaml（含 speller.algebra 模糊音规则）自动重新编译
+                try {
+                    File(CustomConstant.RIME_DICT_PATH, "build/pinyin.prism.bin").delete()
+                } catch (_: Exception) { }
                 AppPrefs.getInstance().internal.dataDictVersion.setValue(CustomConstant.CURRENT_RIME_DICT_DATA_VERSIOM)
             }
             Kernel.resetIme()  // 解决词库复制慢，导致先调用初始化问题
