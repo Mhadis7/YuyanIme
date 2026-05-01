@@ -2,11 +2,11 @@
 .gradle/
 local.properties
 .DS_Store
-build/
-captures/
+/captures/
 .externalNativeBuild
 .idea/
 *.jks
 keystore/keystore.properties
 /.kotlin
 *.log
+/build/
