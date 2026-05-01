@@ -83,7 +83,13 @@ android {
     }
 }
 
-// kotlin {
+// Set Kotlin jvmTarget to match Java compileOptions
+// Use jvmToolchain only when target JDK is available
+if (JavaVersion.current().toString() == "17") {
+    kotlin {
+        jvmToolchain(17)
+    }
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
