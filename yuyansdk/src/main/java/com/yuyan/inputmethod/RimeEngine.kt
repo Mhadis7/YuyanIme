@@ -230,9 +230,10 @@ object RimeEngine {
                 emptyArray()
             }
         }
-        // 模糊音候选补充：仅在全键拼音模式下生效
-        if (rimeSchema == CustomConstant.SCHEMA_ZH_QWERTY
+        // 模糊音候选补充：中文输入模式下生效（全键、九键、双拼等）
+        if (rimeSchema != CustomConstant.SCHEMA_EN
             && composition.isNotBlank()
+            && composition.length >= 2  // 至少 2 个字符才进行模糊匹配
             && FuzzyPinyinUtils.isEnabled()
         ) {
             val fuzzyChars = PinyinFuzzyMatcher.getFuzzyCandidates(composition)
