@@ -83,15 +83,14 @@ android {
 
     }
 
-    //    第三方库使用java1.8
+    // Dynamic JDK version detection: use JDK 21 if available, fallback to 17
+    def jvmVersion = JavaVersion.current().toString()
     compileOptions {
-        sourceCompatibility 21
-        targetCompatibility 21
+        sourceCompatibility JavaVersion.toVersion(jvmVersion)
+        targetCompatibility JavaVersion.toVersion(jvmVersion)
     }
 }
 
-// 移除 jvmToolchain 限制，使用环境默认 JDK (当前为 JDK 21)
-// jvmToolchain(17) 需要 JDK 17 但当前环境只有 JDK 21
 // kotlin {
 
 android.applicationVariants.configureEach { variant ->
