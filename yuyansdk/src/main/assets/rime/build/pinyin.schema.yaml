@@ -1,26 +1,30 @@
-__build_info:
-  rime_version: 1.11.2
-  timestamps:
-    default: 1744370669
-    default.custom: 1744370670
-    pinyin.custom: 0
-    pinyin.schema: 1744370670
-cn_en:
-  db_class: stabledb
-  dictionary: ""
-  enable_completion: true
-  enable_sentence: false
-  initial_quality: 0.5
-  user_dict: "en_dicts/cn_en"
-emoji:
-  inherit_comment: false
-  opencc_config: emoji.json
-  option_name: emoji
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: pinyin
+  name: 全键拼音
+  version: "2026-05-01"
+  description: |
+    全键拼音 (融合雾凇拼音模糊音支持)
+    https://github.com/iDvel/rime-ice
+  dependencies:
+    - english
+
+switches:
+  - name: ascii_mode
+    states: [ 中, Ａ ]
+  - name: ascii_punct
+    states: [ ¥, ＄ ]
+  - name: traditionalization
+    states: [ 简, 繁 ]
+  - name: emoji
+    states: [ 💀, 😄 ]
+    reset: 1
+  - name: full_shape
+    states: [ 半角, 全角 ]
+
 engine:
-  filters:
-    - "simplifier@emoji"
-    - "simplifier@traditionalize"
-    - uniquifier
   processors:
     - ascii_composer
     - recognizer
@@ -40,30 +44,147 @@ engine:
     - script_translator
     - "table_translator@english"
     - "table_translator@cn_en"
+  filters:
+    - "simplifier@emoji"
+    - "simplifier@traditionalize"
+    - uniquifier
+
+translator:
+  dictionary: pinyin
+  initial_quality: 1.2
+  spelling_hints: 100
+  always_show_comments: true
+  comment_format:
+    - xform/^/［/
+    - xform/$/］/
+  preedit_format:
+    - xform/([jqxy])v/$1u/
+    - xform/([nl])v/$1v/
+    - xform/([nl])ue/$1ve/
+
 english:
   dictionary: english
   enable_sentence: false
   enable_user_dict: false
   initial_quality: 1.1
+
+cn_en:
+  db_class: stabledb
+  dictionary: ""
+  enable_completion: true
+  enable_sentence: false
+  initial_quality: 0.5
+  user_dict: "en_dicts/cn_en"
+
+emoji:
+  option_name: emoji
+  opencc_config: emoji.json
+  inherit_comment: false
+
+traditionalize:
+  option_name: traditionalization
+  opencc_config: s2t.json
+
 punctuator:
   symbols:
     "/": ["@", "＃", "＊", "＋", "……", "〜", "（", "）", "、", "/"]
+
 recognizer:
   patterns:
     punct: "^/([0-9]|10|[A-Za-z]*?)$"
-schema:
-  dependencies:
-    - english
-  name: "全键拼音"
-  schema_id: pinyin
+
+key_binder:
+  import_preset: default
+
+editor:
+  bindings:
+    space: confirm
+    Return: commit_raw_input
+    BackSpace: revert
+    Delete: delete
+    Escape: cancel
+
 speller:
-  alphabet: "zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA`/"
-  delimiter: "''"
-traditionalize:
-  opencc_config: s2t.json
-  option_name: traditionalization
-translator:
-  always_show_comments: true
-  dictionary: pinyin
-  initial_quality: 1.2
-  spelling_hints: 100
+  alphabet: "zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA`"
+  initials: "zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA"
+  delimiter: " '"
+  algebra:
+    ### 模糊音匹配（默认启用 in/ing, en/eng, an/ang 等）
+    - derive/en$/eng/
+    - derive/eng$/en/
+    - derive/in$/ing/
+    - derive/ing$/in/
+    - derive/an$/ang/
+    - derive/ang$/an/
+    - derive/ian$/iang/
+    - derive/iang$/ian/
+    - derive/uan$/uang/
+    - derive/uang$/uan/
+
+    ### 模糊音 — 声母（默认启用 zh↔z, ch↔c, sh↔s）
+    - derive/^zh/z/
+    - derive/^z/zh/      # match both directions: zh->z only. use next rule for z->zh
+    # 注意: 上面的 ^z 规则会和 ^zh 冲突。改用更精确的方式:
+    - "derive/^([zcs])h/$1/"   # zh* ch* sh* *also* match z* c* s*
+    - "derive/^([zcs])([^h])/$1h$2/"   # z* c* s* *also* match zh* ch* sh*
+
+    ### 模糊音 — n/l, f/h, r/l
+    - derive/^l/n/
+    - derive/^n/l/
+    - derive/^f/h/
+    - derive/^h/f/
+    - derive/^r/l/
+    - derive/^l/r/
+
+    ### v u 转换
+    - derive/^([nl])ve$/$1ue/
+    - derive/^([jqxy])u/$1v/
+    - derive/^([nl])ue$/$1ve/
+    - derive/^([jqxy])v/$1u/
+
+    ### 超级简拼
+    - erase/^hm$/
+    - erase/^m$/
+    - erase/^n$/
+    - erase/^ng$/
+    - abbrev/^([a-z]).+$/$1/
+    - abbrev/^([zcs]h).+$/$1/
+
+    ### 自动纠错
+    - derive/^([wghk])ai$/$1ia/
+    - derive/([wfghkz])ei$/$1ie/
+    - derive/([jqx])ie$/$1ei/
+    - derive/([rtypsdghklzcbnm])ao$/$1oa/
+    - derive/([ypfm])ou$/$1uo/
+    - derive/([wrtypsdfghklzcbnm])ang$/$1nag/
+    - derive/([wrtypsdfghklzcbnm])ang$/$1agn/
+    - derive/([wrtpsdfghklzcbnm])eng$/$1neg/
+    - derive/([wrtpsdfghklzcbnm])eng$/$1egn/
+    - derive/([qtypdjlxbnm])ing$/$1nig/
+    - derive/([qtypdjlxbnm])ing$/$1ign/
+    - derive/([rtysdghklzcn])ong$/$1nog/
+    - derive/([rtysdghklzcn])ong$/$1ogn/
+    - derive/([qtpdjlxbnm])iao$/$1ioa/
+    - derive/([qtpdjlxbnm])iao$/$1oia/
+    - derive/([rtsghkzc])ui$/$1iu/
+    - derive/([qjlxnm])iu$/$1ui/
+    - derive/([qjlxn])iang$/$1aing/
+    - derive/([qjlxn])iang$/$1inag/
+    - derive/([g|h|k|zh|sh])ua$/$1au/
+    - derive/([g|h|k|zh|ch|sh])uai$/$1aui/
+    - derive/([qrtysdghjklzxcn])uan$/$1aun/
+    - derive/([nlyjqx])ue$/$1eu/
+    - derive/([g|h|k|zh|ch|sh])uang$/$1aung/
+    - derive/([g|h|k|zh|ch|sh])uang$/$1uagn/
+    - derive/([g|h|k|zh|ch|sh])uang$/$1unag/
+    - derive/([g|h|k|zh|ch|sh])uang$/$1augn/
+    - derive/([jqx])iong$/$1inog/
+    - derive/([jqx])iong$/$1oing/
+    - derive/([jqx])iong$/$1iogn/
+    - derive/([jqx])iong$/$1oign/
+
+    ### 其他
+    - derive/([rtsdghkzc])o(u|ng)$/$1o/
+    - derive/(.+)ong$/$1on/
+    - derive/([tl])eng$/$1en/
+    - derive/([qwrtypsdfghjklzxcbnm])([aeio])ng$/$1ng/
