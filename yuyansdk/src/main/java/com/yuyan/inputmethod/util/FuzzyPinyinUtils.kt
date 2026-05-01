@@ -90,4 +90,11 @@ object FuzzyPinyinUtils {
             }
         }
     }
+
+    /**
+     * 模糊音是否已开启（非关闭状态）
+     */
+    fun isEnabled(): Boolean {
+        return AppPrefs.getInstance().input.fuzzyPinyinMode.getValue() != FuzzyPinyinMode.Off
+    }
 }

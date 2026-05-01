@@ -13,6 +13,7 @@ import com.yuyan.inputmethod.data.KeyRecordStack
 import com.yuyan.inputmethod.util.DoublePinYinUtils
 import com.yuyan.inputmethod.util.FuzzyPinyinUtils
 import com.yuyan.inputmethod.util.LX17PinYinUtils
+import com.yuyan.inputmethod.util.PinyinFuzzyMatcher
 import com.yuyan.inputmethod.util.QwertyPinYinUtils
 import com.yuyan.inputmethod.util.T9PinYinUtils
 import java.util.Locale
@@ -27,6 +28,10 @@ object RimeEngine {
     fun init() {
         Rime.getInstance(false)
         FuzzyPinyinUtils.applyCurrentSetting()
+        // 初始化拼音模糊音匹配器
+        try {
+            PinyinFuzzyMatcher.init(Launcher.instance.context)
+        } catch (_: Exception) { }
     }
 
     fun selectSchema(mod: String): Boolean {
@@ -223,6 +228,23 @@ object RimeEngine {
             }
             else -> {
                 emptyArray()
+            }
+        }
+        // 模糊音候选补充：仅在全键拼音模式下生效
+        if (rimeSchema == CustomConstant.SCHEMA_ZH_QWERTY
+            && composition.isNotBlank()
+            && FuzzyPinyinUtils.isEnabled()
+        ) {
+            val fuzzyChars = PinyinFuzzyMatcher.getFuzzyCandidates(composition)
+            if (fuzzyChars.isNotEmpty()) {
+                val existingTexts = showCandidates.map { it.text }.toSet()
+                val newCandidates = fuzzyChars
+                    .filter { it !in existingTexts }   // 去重
+                    .take(20)                           // 最多补充 20 个
+                    .map { CandidateListItem("~", it) } // ~ 标记为模糊匹配
+                if (newCandidates.isNotEmpty()) {
+                    showCandidates = showCandidates + newCandidates
+                }
             }
         }
         showComposition = composition
