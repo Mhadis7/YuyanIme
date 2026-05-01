@@ -83,16 +83,16 @@ android {
 
     }
 
-    // Dynamic JDK version detection: use JDK 21 if available, fallback to 17
-    def jvmVersion = JavaVersion.current().toString()
+    //    第三方库使用java1.8
     compileOptions {
-        sourceCompatibility JavaVersion.toVersion(jvmVersion)
-        targetCompatibility JavaVersion.toVersion(jvmVersion)
+        sourceCompatibility JavaVersion.toVersion(JavaVersion.current().toString())
+        targetCompatibility JavaVersion.toVersion(JavaVersion.current().toString())
     }
 }
 
-// Set Kotlin jvmTarget to match Java compileOptions
-// Use jvmToolchain only when target JDK is available
+// Use JDK toolchain matching the current Java version.
+// On CI (JDK 17): jvmToolchain(17) is used directly.
+// On local ARM64 (JDK 21): no toolchain needed — Kotlin uses default JDK.
 if (JavaVersion.current().toString() == "17") {
     kotlin {
         jvmToolchain(17)
