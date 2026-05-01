@@ -98,6 +98,7 @@
     <string name="clipboard_suggestion">显示剪贴板提示</string>
     <string name="system_default">系统默认</string>
     <string name="num_50">50条</string>
+    <string name="num_100">100条</string>
     <string name="default_">默认</string>
 
     <string name="phrases_manage_title">词库管理</string>
